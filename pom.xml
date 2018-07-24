@@ -9,6 +9,7 @@
 	<properties>
 		<jacoco.version>0.7.5.201505241946</jacoco.version>
 		<junit.version>4.12</junit.version>
+		 <argLine>-Xmx128m</argLine>
 	</properties>
 
 	<dependencies>
@@ -46,7 +47,7 @@
   <executions>
     <execution>
       <configuration>
-        <destFile>${sonar.jacoco.reportPath}</destFile>
+        <destFile>target/jacoco.exec</destFile>
       </configuration>
       <id>pre-test</id>
       <phase>process-test-classes</phase>
@@ -57,7 +58,7 @@
 
     <execution>
       <configuration>
-        <destFile>${sonar.jacoco.itReportPath}</destFile>
+        <destFile>target/jacoco-it.exec</destFile>
       </configuration>
       <id>pre-itest</id>
       <phase>pre-integration-test</phase>
