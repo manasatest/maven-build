@@ -39,28 +39,8 @@ public class TestJavaTest {
 		assertEquals(expected, actual);		
 	}
 	
-	@Test
-	public void testSub1(){		
-		TestJava test = new TestJava();
-		int actual = test.sub(3, 2);
-		int expected = 4;
-		assertEquals(expected, actual);		
-	}
 	
-	@Test
-	public void testSub2(){		
-		TestJava test = new TestJava();
-		int actual = test.sub(8, 2);
-		int expected = 4;
-		assertEquals(expected, actual);		
-	}
 	
-	@Test
-	public void testMultiply(){		
-		TestJava test = new TestJava();
-		int actual = test.multiply(2, 6);
-		int expected = 12;
-		assertEquals(expected, actual);		
-	}
+	
 
 }
