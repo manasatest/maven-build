@@ -1,93 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.test</groupId>
-	<artifactId>maventest</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>Maven Test</name>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<properties>
-		<jacoco.version>0.7.5.201505241946</jacoco.version>
-		<junit.version>4.12</junit.version>
-		 <argLine>-Xmx128m</argLine>
-	</properties>
+  <groupId>com.test</groupId>
+  <artifactId>maventest</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Maven Test</name>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-failsafe-plugin</artifactId>
-  <version>2.13</version>
-  <configuration>
-    <encoding>${project.build.sourceEncoding}</encoding>
-  </configuration>
-  <executions>
-    <execution>
-      <id>failsafe-integration-tests</id>
-      <phase>integration-test</phase>
-      <goals>
-        <goal>integration-test</goal>
-        <goal>verify</goal>
-      </goals>
-    </execution>
-  </executions>
-</plugin>
-			<plugin>
-  <groupId>org.jacoco</groupId>
-  <artifactId>jacoco-maven-plugin</artifactId>
-  <version>0.7.2.201409121644</version>
-  <executions>
-    <execution>
-      <configuration>
-        <destFile>target/jacoco.exec</destFile>
-      </configuration>
-      <id>pre-test</id>
-      <phase>process-test-classes</phase>
-      <goals>
-        <goal>prepare-agent</goal>
-      </goals>
-    </execution>
 
-    <execution>
-      <configuration>
-        <destFile>target/jacoco-it.exec</destFile>
-      </configuration>
-      <id>pre-itest</id>
-      <phase>pre-integration-test</phase>
-      <goals>
-        <goal>prepare-agent-integration</goal>
-      </goals>
-    </execution>
-  </executions>
-</plugin>
-   <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.19.1</version>
-          <configuration>
-        <testFailureIgnore>true</testFailureIgnore>
-        <forkCount>3</forkCount>
-    <reuseForks>true</reuseForks>
-    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
-    </configuration>
-        </plugin>
-		</plugins>
-		<pluginManagement>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Sonar -->
+    <!-- The destination file for the code coverage report has to be set to the same value
+         in the parent pom and in each module pom. Then JaCoCo will add up information in
+         the same report, so that, it will give the cross-module code coverage. -->
+    <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+    <sonar.groovy.binaries>target/classes</sonar.groovy.binaries>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
     <plugins>
       <plugin>
-        <groupId>org.sonarsource.scanner.maven</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>3.4.0.905</version>
-      </plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.0</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>     
     </plugins>
-  </pluginManagement>
-	</build>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>sonar-coverage</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.jacoco</groupId>
+              <artifactId>jacoco-maven-plugin</artifactId>
+              <version>0.7.8</version>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <configuration>
+              <append>true</append>
+            </configuration>
+            <executions>
+              <execution>
+                <id>agent-for-ut</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>agent-for-it</id>
+                <goals>
+                  <goal>prepare-agent-integration</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>jacoco-site</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
